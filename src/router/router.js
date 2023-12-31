@@ -42,7 +42,7 @@ router.post('/products',validateToken, asyncHandler(async (req, res) => {
       }
       const updateProduct = await Product.findByIdAndUpdate(
         req.params.id,
-        re.body,
+        req.body,
         {new:true}
       );
       res.status(200).send(updateProduct);
@@ -100,19 +100,20 @@ router.get('/products/featured', validateToken, asyncHandler(async (req, res) =>
 }));
 
   // Fetch products with rating higher than a certain value
-  router.get('/products/rating/:value',validateToken, async (req, res) => {
+  router.get('/products/rating/:value', validateToken, asyncHandler(async (req, res) => {
     try {
       const { value } = req.params;
-        const user = await Product.findOne({user_id:req.user.id});
-        if (user.user_id.toString() !== req.user.id) {
-            res.status(403);
-            throw new Error("User don't have permission to access featured products");
-        }
+      const user = await Product.findOne({ user_id: req.user.id });
+      if (user.user_id.toString() !== req.user.id) {
+        res.status(403);
+        throw new Error("User don't have permission to access featured products");
+      }
       const products = await Product.find({ user_id: req.user.id, rating: { $gt: value } });
       res.send(products);
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
-  });
+  }));
+  
   
 module.exports = router;
