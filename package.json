@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "DB_STRING=mongodb+srv://patilsonalias002:UlaFWtLpEHjLR7qz@cluster0.w8m1b2p.mongodb.net nodemon src/app.js"
+    "start" : "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
