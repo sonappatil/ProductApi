@@ -17,6 +17,10 @@ app.use(express.json());
 app.use(cors());
 app.use(ProductRouter);
 
+app.get("/",async(req,res)=>{
+    res.send("Welcome to the server page");
+})
+
 //for  register
 app.post('/register', asyncHandler(async (req, res) => {
     try {
