@@ -22,16 +22,16 @@ router.post('/products',validateToken, asyncHandler(async (req, res) => {
 }));
   
   // Get all products
-  router.get('/products', validateToken,asyncHandler(async (req, res) => {
-    try {
-      const products = await Product.find({user_id: req.user.id});
-      //console.log(products);
-      res.status(200).send(products);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
-  })
-  );
+  // router.get('/products', validateToken,asyncHandler(async (req, res) => {
+  //   try {
+  //     const products = await Product.find({user_id: req.user.id});
+  //     //console.log(products);
+  //     res.status(200).send(products);
+  //   } catch (error) {
+  //     res.status(500).send({ message: error.message });
+  //   }
+  // })
+  // );
   // Update a product
   router.put('/products/:id',validateToken, asyncHandler(async (req, res) => {
     try {

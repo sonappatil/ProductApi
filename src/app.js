@@ -21,6 +21,16 @@ app.get("/",async(req,res)=>{
     res.send("Welcome to the server page");
 })
 
+app.get('/products', validateToken,asyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({user_id: req.user.id});
+      //console.log(products);
+      res.status(200).send(products);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
+  );
 //for  register
 app.post('/register', asyncHandler(async (req, res) => {
     try {
