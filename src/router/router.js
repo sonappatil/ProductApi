@@ -5,9 +5,9 @@ const Product = require("../model/productModel");
 const validateToken = require("../middleware/validatetoken");
 const Register = require("../model/registerModel");
 
-router.use(validateToken);
+// router.use(validateToken);
 
-router.post('/products', asyncHandler(async (req, res) => {
+router.post('/products',validateToken, asyncHandler(async (req, res) => {
   try {
     const {productID, name, price, featured, rating, company} = req.body;
     const savedProduct = await Product.create({
@@ -22,7 +22,7 @@ router.post('/products', asyncHandler(async (req, res) => {
 }));
   
   // Get all products
-  router.get('/products',asyncHandler(async (req, res) => {
+  router.get('/products', validateToken,asyncHandler(async (req, res) => {
     try {
       const products = await Product.find({user_id: req.user.id});
       //console.log(products);
@@ -52,7 +52,7 @@ router.post('/products', asyncHandler(async (req, res) => {
   }));
   
   // Delete a product
-  router.delete('/products/:id',asyncHandler(async (req, res) => {
+  router.delete('/products/:id', validateToken,asyncHandler(async (req, res) => {
     try {
      const deleteProduct =  await Product.findById(req.params.id);
      if (deleteProduct.user_id.toString() !== req.user.id) {
@@ -67,7 +67,7 @@ router.post('/products', asyncHandler(async (req, res) => {
   }));
   
   // Fetch featured products
-router.get('/products/featured', asyncHandler(async (req, res) => {
+router.get('/products/featured', validateToken, asyncHandler(async (req, res) => {
   try {
       const user = await Product.findOne({user_id:req.user.id});
       if (user.user_id.toString() !== req.user.id) {
@@ -84,7 +84,7 @@ router.get('/products/featured', asyncHandler(async (req, res) => {
  
   
   // Fetch products with price less than a certain value
-  router.get('/products/price/:value', asyncHandler(async (req, res) => {
+  router.get('/products/price/:value', validateToken, asyncHandler(async (req, res) => {
     try {
         const { value } = req.params;
         const user = await Product.findOne({user_id:req.user.id});
@@ -100,20 +100,20 @@ router.get('/products/featured', asyncHandler(async (req, res) => {
 }));
 
   // Fetch products with rating higher than a certain value
-  router.get('/products/rating/:value', asyncHandler(async (req, res) => {
-    try {
-      const { value } = req.params;
-      const user = await Product.findOne({ user_id: req.user.id });
-      if (user.user_id.toString() !== req.user.id) {
-        res.status(403);
-        throw new Error("User don't have permission to access featured products");
-      }
-      const products = await Product.find({ user_id: req.user.id, rating: { $gt: value } });
-      res.send(products);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
+ router.get('/products/rating/:value', validateToken, asyncHandler(async (req, res) => {
+  try {
+    const { value } = req.params;
+    const user = await Product.findOne({ user_id: req.user.id });
+    if (user.user_id.toString() !== req.user.id) {
+      res.status(403);
+      throw new Error("User don't have permission to access featured products");
     }
-  }));
-  
+    const products = await Product.find({ user_id: req.user.id, rating: { $gt: value } });
+    res.send(products);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+}));
+
   
 module.exports = router;
