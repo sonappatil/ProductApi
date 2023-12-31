@@ -25,7 +25,7 @@ router.post('/products',validateToken, asyncHandler(async (req, res) => {
   router.get('/products', validateToken,asyncHandler(async (req, res) => {
     try {
       const products = await Product.find({user_id: req.user.id});
-      //console.log(products);
+      console.log(products);
       res.status(200).send(products);
     } catch (error) {
       res.status(500).send({ message: error.message });
@@ -114,5 +114,5 @@ router.get('/products/featured', validateToken, asyncHandler(async (req, res) =>
       res.status(500).send({ message: error.message });
     }
   });
-  
+
 module.exports = router;
